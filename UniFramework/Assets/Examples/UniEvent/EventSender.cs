@@ -1,4 +1,3 @@
-using System;
 using UniFramework.Event;
 using UnityEngine;
 
@@ -26,5 +25,10 @@ public class EventSender : MonoBehaviour
     private void OnDestroy()
     {
         UniEvent.Destroy();
+    }
+
+    private void OnGUI()
+    {
+        GUILayout.Label("点击回车触发事件");
     }
 }

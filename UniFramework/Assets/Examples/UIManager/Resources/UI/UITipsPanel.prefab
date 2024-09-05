@@ -208,10 +208,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21b71d5b19c20a247a34153dde66daed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sonpanelname: 
+  sonPanelName: 
   parentPanelName: 
-  layer: 3
-  uIEffect: []
+  layer: 2
 --- !u!222 &8741581343240332022
 CanvasRenderer:
   m_ObjectHideFlags: 0

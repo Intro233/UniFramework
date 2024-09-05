@@ -11,10 +11,7 @@ public class UIMain : UIBase
         GetControl<Button>("Start")?.onClick.AddListener(() =>
         {
             Debug.Log("Click Start!");
-            Manager.UI.ShowPanel<UITips>("UITipsPanel", (Panel) =>
-            {
-                Panel.Init("这是提示！");
-            });
+            UIManager.Instance.ShowPanel<UITips>("UITipsPanel", (Panel) => { Panel.Init("这是提示！"); });
         });
     }
 }

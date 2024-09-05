@@ -19,7 +19,7 @@ public class UIBase : MonoBehaviour
     [HideInInspector] public string parentPanelName;
 
     //面板的层级
-    public E_UI_Layer layer = E_UI_Layer.Top;
+    public EUILayer layer = EUILayer.Top;
 
     private bool mIsPanel = false;
 
@@ -44,13 +44,13 @@ public class UIBase : MonoBehaviour
     public virtual void UpdateInfo()
     {
         if (mIsPanel)
-            Manager.UI.GetPanel<UIBase>(parentPanelName)?.UpdateInfo();
+            UIManager.Instance.GetPanel<UIBase>(parentPanelName)?.UpdateInfo();
     }
 
     public virtual void UpdateInfo(int id)
     {
         if (mIsPanel)
-            Manager.UI.GetPanel<UIBase>(parentPanelName)?.UpdateInfo(id);
+            UIManager.Instance.GetPanel<UIBase>(parentPanelName)?.UpdateInfo(id);
     }
 
     /// <summary>
@@ -59,35 +59,17 @@ public class UIBase : MonoBehaviour
     public virtual void ShowMe()
     {
         mIsPanel = true;
-        this.transform.SetParent(Manager.UI.GetLayerFather(layer));
-        if (Manager.UI.GetActivityPanel() != null)
-            parentPanelName = Manager.UI.GetActivityPanel();
+        this.transform.SetParent(UIManager.Instance.GetLayerFather(layer),false);
+        if (UIManager.Instance.GetActivityPanel() != null)
+            parentPanelName =UIManager.Instance.GetActivityPanel();
 
-        if (layer == E_UI_Layer.Top)
+        if (layer == EUILayer.Top)
         {
-            if (!Manager.UI.topPanelDic.Contains(this.transform.name.Replace("(Clone)", "")))
-                Manager.UI.topPanelDic.Add(this.transform.name.Replace("(Clone)", ""));
+            if (!UIManager.Instance.topPanelDic.Contains(this.transform.name.Replace("(Clone)", "")))
+                UIManager.Instance.topPanelDic.Add(this.transform.name.Replace("(Clone)", ""));
         }
 
         sonPanelName = "";
-        if (GetControl<Image>("PanelMask"))
-        {
-            //遮罩底板
-            UIMgr.AddCustomEventListener(GetControl<Image>("PanelMask"), EventTriggerType.PointerClick, (obj) =>
-            {
-                Manager.UI.HidePanel(this.transform.name.Replace("(Clone)", ""));
-                //发送该界面关闭消息
-               EventManager.Instance.TriggerEvent<string>(EventDefine.PanelClose, this.transform.name.Replace("(Clone)", ""));
-            });
-        }
-
-
-        //监听弹窗界面关闭事件
-        EventManager.Instance.AddEventListener<string>(EventDefine.PanelClose, (str) =>
-        {
-            if (sonPanelName == str)
-                sonPanelName = "";
-        });
     }
 
     /// <summary>
@@ -102,14 +84,8 @@ public class UIBase : MonoBehaviour
     /// </summary>
     public virtual void HideMe()
     {
-        //监听弹窗界面关闭事件
-        EventManager.Instance.RemoveEventListener<string>(EventDefine.PanelClose, (str) =>
-        {
-            if (sonPanelName == str)
-                sonPanelName = "";
-        });
         if (sonPanelName != "")
-            Manager.UI.HidePanel(sonPanelName);
+            UIManager.Instance.HidePanel(sonPanelName);
     }
 
     /// <summary>
@@ -127,7 +103,7 @@ public class UIBase : MonoBehaviour
             return;
         if (sonPanelName != "")
         {
-            Manager.UI.HidePanel(sonPanelName);
+            UIManager.Instance.HidePanel(sonPanelName);
             sonPanelName = nextpanelname;
         }
     }

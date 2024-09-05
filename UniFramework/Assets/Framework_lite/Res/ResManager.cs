@@ -13,7 +13,7 @@ using Object = UnityEngine.Object;
 /// 3.协程
 /// 4.泛型
 /// </summary>
-public class ResMgr : MonoBehaviour
+public class ResManager : SingletonMonoBase<ResManager>
 {
     //同步加载资源
     public T Load<T>(string name) where T : Object
@@ -25,6 +25,7 @@ public class ResMgr : MonoBehaviour
             Debug.Log(name + "找不到");
             return null;
         }
+
         if (res is GameObject)
             return GameObject.Instantiate(res);
         else
@@ -35,8 +36,9 @@ public class ResMgr : MonoBehaviour
     public void LoadAsync<T>(string name, UnityAction<T> callback) where T : Object
     {
         //开启异步加载的协程
-        Manager.MonoMgr.StartCoroutine(ReallyLoadAsync(name, callback));
+        StartCoroutine(ReallyLoadAsync(name, callback));
     }
+
     //真正的协同程序函数  用于 开启异步加载对应的资源
     private IEnumerator ReallyLoadAsync<T>(string assetName, UnityAction<T> callback = null) where T : Object
     {
