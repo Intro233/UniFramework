@@ -1,21 +1,9 @@
 using System;
 using UnityEngine;
 
-public class DateHelper : MonoBehaviour
+public class DateHelper 
 {
-    private void Start()
-    {
-        var time = DateTime.Now;
-        Debug.LogError(GetTimeLongAgo(GetTimestampSeconds() - 1726044460));
-
-        Debug.LogError(Minutes2DHM2(5));
-        Debug.LogError(Minutes2DHM2(120));
-        Debug.LogError(Minutes2DHM2(6533));
-
-        Debug.LogError(TimeStampSeconds2Date(1726044460));
-    }
-
-
+    
     #region 获取
 
     /// <summary>
