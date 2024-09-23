@@ -1,20 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using YooAsset;
 
 public class Test : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
-        Manager.UIManager.ShowPanel<UIMainPanel>();
-        Manager.UIManager.ShowPanel<UIWindow>();
-      
+        StartCoroutine(Init());
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator Init()
     {
-        
+        while (!AppFacade.PacageInited)
+        {
+            yield return null;
+        }
+
+        Manager.UIManager.ShowPanel<UIMainPanel>();
+        Manager.UIManager.ShowPanel<UIWindow>();
     }
 }
