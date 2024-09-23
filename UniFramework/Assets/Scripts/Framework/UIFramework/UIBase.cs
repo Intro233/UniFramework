@@ -1,6 +1,7 @@
 // using DG.Tweening;
 
 using System.Collections.Generic;
+using CodeBind;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -20,6 +21,7 @@ namespace UniFramework.UI
         private CanvasGroup mUIMask;
         private CanvasGroup mCanvasGroup;
         protected Transform mPanelTrans;
+        protected CSCodeBindMono mBindMono;
 
         /// <summary>
         /// 初始化基类组件
@@ -55,6 +57,10 @@ namespace UniFramework.UI
         public override void OnAwake()
         {
             base.OnAwake();
+            if (gameObject.TryGetComponent<CSCodeBindMono>(out var csCodeBindMono))
+            {
+                mBindMono = csCodeBindMono;
+            }
         }
 
         public override void OnShow()
@@ -206,9 +212,10 @@ namespace UniFramework.UI
         #endregion
 
         #region 动画管理
+
         // protected bool mDisableAnim = false; // 禁用动画
 
-  
+
         //
         // public void ShowAnimation()
         // {
@@ -239,6 +246,7 @@ namespace UniFramework.UI
         //     }
         // }
         //
+
         #endregion
     }
 }

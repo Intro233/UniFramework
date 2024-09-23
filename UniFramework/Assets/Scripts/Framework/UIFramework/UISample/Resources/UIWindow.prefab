@@ -451,13 +451,14 @@ GameObject:
   - component: {fileID: 8893062609498533013}
   - component: {fileID: 8893062609498533012}
   - component: {fileID: 8893062609498533015}
+  - component: {fileID: 3581414167216816595}
   m_Layer: 5
   m_Name: UIWindow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8893062609498533014
 RectTransform:
   m_ObjectHideFlags: 0
@@ -541,6 +542,24 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 32
+--- !u!114 &3581414167216816595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8893062609498533009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5452a0c3619826c4f889a047605eef79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BindComponents:
+  - {fileID: 8893062609803302660}
+  m_SeparatorChar: 95
+  m_BindScript: {fileID: 11500000, guid: 4437691f036f99f4092a5ebfa95f849d, type: 3}
+  m_BindComponentNames:
+  - ShowButton
 --- !u!1 &8893062609803302662
 GameObject:
   m_ObjectHideFlags: 0
@@ -554,7 +573,7 @@ GameObject:
   - component: {fileID: 8893062609803302661}
   - component: {fileID: 8893062609803302660}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Show_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
