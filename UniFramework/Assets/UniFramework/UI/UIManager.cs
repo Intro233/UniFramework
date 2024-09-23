@@ -25,6 +25,10 @@ namespace UniFramework.UI
             }
         }
 
+        private UIManager()
+        {
+        }
+
         private Camera mUICamera; // 场景 UI 相机
         private Transform mUIRoot; // UI 根物体
 
@@ -35,6 +39,20 @@ namespace UniFramework.UI
         private Queue<UIBase> mWindowStack = new Queue<UIBase>(); // 队列 用来管理弹窗的循环弹出
         private bool mStartPopStackWndStatus; // 开始弹出堆栈的表只 可以用来处理多种情况 比如：正在出栈种有其他界面弹出 可以直接放到栈内进行弹出 等
 
+        private int mSortingOrderStep = 20;
+
+        public int CanvasOrder
+        {
+            get
+            {
+                if (mVisibleWindowList != null)
+                {
+                    return mVisibleWindowList.Count * 20;
+                }
+
+                return 0;
+            }
+        }
 
         /// <summary>
         /// 初始化 UIModule 管理器方法
@@ -68,6 +86,15 @@ namespace UniFramework.UI
         }
 
         /// <summary>
+        /// 泛型 隐藏面板
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        public void HidePanel<T>() where T : UIBase
+        {
+            HidePanel(typeof(T).Name);
+        }
+
+        /// <summary>
         /// 隐藏面板
         /// </summary>
         /// <param name="wndName">面板类名</param>
@@ -75,15 +102,6 @@ namespace UniFramework.UI
         {
             UIBase panel = GetPanel(wndName);
             HidePanel(panel);
-        }
-
-        /// <summary>
-        /// 泛型 隐藏面板
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        public void HidePanel<T>() where T : UIBase
-        {
-            HidePanel(typeof(T).Name);
         }
 
         /// <summary>
@@ -138,23 +156,6 @@ namespace UniFramework.UI
             Resources.UnloadUnusedAssets();
         }
 
-        /// <summary>
-        /// 弹出一个窗口 并渲染在视窗最前面
-        /// </summary>
-        /// <param name="panel"></param>
-        /// <returns></returns>
-        private UIBase ShowPanel(UIBase panel)
-        {
-            Type type = panel.GetType();
-            string wndName = type.Name;
-            UIBase wnd = GetPanel(wndName);
-            if (wnd != null)
-            {
-                return ShowWindow(wndName);
-            }
-
-            return InitializeWindow(panel, wndName);
-        }
 
         /// <summary>
         /// 初始化窗口
@@ -188,12 +189,50 @@ namespace UniFramework.UI
                 mAllWindowList.Add(panelBase);
                 mVisibleWindowList.Add(panelBase);
                 SetWidnowMaskVisible();
+                RefreshCanvasOrder();
                 return panelBase;
             }
 
             Debug.LogError("没有加载到对应的窗口 窗口名字：" + PanelName);
             return null;
         }
+
+        /// <summary>
+        /// 动态加载窗口预制件
+        /// </summary>
+        /// <param name="wndName">窗口名</param>
+        /// <returns></returns>
+        private GameObject LoadPanel(string wndName)
+        {
+            //TODO 资源加载
+            // GameObject window = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>(mWindowConfig.GetWindowPath(wndName)), mUIRoot);
+            GameObject window = Object.Instantiate(Resources.Load<GameObject>(wndName), mUIRoot);
+            //window.transform.SetParent(mUIRoot);
+            window.transform.localScale = Vector3.one;
+            window.transform.localPosition = Vector3.zero;
+            window.transform.rotation = Quaternion.identity;
+            window.name = wndName;
+            return window;
+        }
+
+        /// <summary>
+        /// 弹出一个窗口 并渲染在视窗最前面
+        /// </summary>
+        /// <param name="panel"></param>
+        /// <returns></returns>
+        private UIBase ShowPanel(UIBase panel)
+        {
+            Type type = panel.GetType();
+            string wndName = type.Name;
+            UIBase wnd = GetPanel(wndName);
+            if (wnd != null)
+            {
+                return ShowWindow(wndName);
+            }
+
+            return InitializeWindow(panel, wndName);
+        }
+
 
         /// <summary>
         /// show 弹出过的窗口
@@ -217,6 +256,7 @@ namespace UniFramework.UI
                     panel.SetVisible(true);
                     SetWidnowMaskVisible();
                     panel.OnShow();
+                    RefreshCanvasOrder();
                 }
 
                 return panel;
@@ -287,24 +327,17 @@ namespace UniFramework.UI
             }
         }
 
-
-        /// <summary>
-        /// 动态加载窗口预制件
-        /// </summary>
-        /// <param name="wndName">窗口名</param>
-        /// <returns></returns>
-        private GameObject LoadPanel(string wndName)
+        private void RefreshCanvasOrder()
         {
-            //TODO 资源加载
-            // GameObject window = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>(mWindowConfig.GetWindowPath(wndName)), mUIRoot);
-            GameObject window = Object.Instantiate(Resources.Load<GameObject>(wndName), mUIRoot);
-            //window.transform.SetParent(mUIRoot);
-            window.transform.localScale = Vector3.one;
-            window.transform.localPosition = Vector3.zero;
-            window.transform.rotation = Quaternion.identity;
-            window.name = wndName;
-            return window;
+            if (mVisibleWindowList != null)
+            {
+                for (int i = 0; i < mVisibleWindowList.Count; i++)
+                {
+                    mVisibleWindowList[i].Canvas.sortingOrder = mSortingOrderStep * i;
+                }
+            }
         }
+
 
         private void SetWidnowMaskVisible()
         {

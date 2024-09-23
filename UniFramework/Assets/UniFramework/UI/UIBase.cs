@@ -18,8 +18,8 @@ namespace UniFramework.UI
         private List<InputField> mInputList = new List<InputField>(); // 所有的输入框列表
 
         // 拿到对应的组件
-        private CanvasGroup mUIMask;
         private CanvasGroup mCanvasGroup;
+        private CanvasGroup mUIMaskCanvasGroup;
         protected Transform mPanelTrans;
         protected CSCodeBindMono mBindMono;
 
@@ -29,28 +29,9 @@ namespace UniFramework.UI
         private void InitializeBaseComponent()
         {
             mCanvasGroup = transform.GetComponent<CanvasGroup>();
-            mUIMask = transform.Find("UIMask")?.GetComponent<CanvasGroup>();
+            mUIMaskCanvasGroup = transform.Find("UIMask")?.GetComponent<CanvasGroup>();
             mPanelTrans = transform.Find("Panel")?.transform;
         }
-
-        /// <summary>
-        /// 设置遮罩的显隐
-        /// </summary>
-        /// <param name="isVisble"></param>
-        public void SetMaskVisible(bool isVisble)
-        {
-            //TODO 暂时默认不启动单遮罩
-            return;
-
-            // 单遮和叠遮模式处理
-            if (!UISetting.Instance.SINGMASK_SYSTEM)
-            {
-                return;
-            }
-
-            mUIMask.alpha = isVisble ? 1 : 0;
-        }
-
 
         #region 重写生命周期
 
@@ -61,6 +42,8 @@ namespace UniFramework.UI
             {
                 mBindMono = csCodeBindMono;
             }
+
+            InitializeBaseComponent();
         }
 
         public override void OnShow()
@@ -100,7 +83,26 @@ namespace UniFramework.UI
         public override void SetVisible(bool isVisble)
         {
             base.SetVisible(isVisble);
-            gameObject.SetActive(isVisble);
+            mCanvasGroup.alpha = isVisble ? 1 : 0;
+            mCanvasGroup.blocksRaycasts = isVisble;
+        }
+        
+        /// <summary>
+        /// 设置遮罩的显隐
+        /// </summary>
+        /// <param name="isVisble"></param>
+        public void SetMaskVisible(bool isVisble)
+        {
+            //TODO 暂时默认不启动单遮罩
+            return;
+
+            // 单遮和叠遮模式处理
+            if (!UISetting.Instance.SINGMASK_SYSTEM)
+            {
+                return;
+            }
+
+            mUIMaskCanvasGroup.alpha = isVisble ? 1 : 0;
         }
 
         #region 组件事件管理

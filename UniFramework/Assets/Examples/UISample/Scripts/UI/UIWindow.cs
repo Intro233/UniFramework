@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public partial class UIWindow : UniFramework.UI.UIBase
 {
     private bool isOpen = true;
-
     public override void OnAwake()
     {
         base.OnAwake();

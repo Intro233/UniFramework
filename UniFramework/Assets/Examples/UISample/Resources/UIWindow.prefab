@@ -452,6 +452,7 @@ GameObject:
   - component: {fileID: 8893062609498533012}
   - component: {fileID: 8893062609498533015}
   - component: {fileID: 3581414167216816595}
+  - component: {fileID: 8136269106945219550}
   m_Layer: 5
   m_Name: UIWindow
   m_TagString: Untagged
@@ -560,6 +561,18 @@ MonoBehaviour:
   m_BindScript: {fileID: 11500000, guid: 4437691f036f99f4092a5ebfa95f849d, type: 3}
   m_BindComponentNames:
   - ShowButton
+--- !u!225 &8136269106945219550
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8893062609498533009}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &8893062609803302662
 GameObject:
   m_ObjectHideFlags: 0

@@ -89,6 +89,7 @@ GameObject:
   - component: {fileID: 3185224144785503051}
   - component: {fileID: 3185224144785503050}
   - component: {fileID: 3185224144785503049}
+  - component: {fileID: 8987432032901032447}
   m_Layer: 5
   m_Name: UIMainPanel
   m_TagString: Untagged
@@ -179,6 +180,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 32
+--- !u!225 &8987432032901032447
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3185224144785503055}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &3185224145100774702
 GameObject:
   m_ObjectHideFlags: 0
