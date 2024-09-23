@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using YooAsset;
 using Object = UnityEngine.Object;
 
 namespace UniFramework.UI
@@ -200,19 +201,21 @@ namespace UniFramework.UI
         /// <summary>
         /// 动态加载窗口预制件
         /// </summary>
-        /// <param name="wndName">窗口名</param>
+        /// <param name="panelName">窗口名</param>
         /// <returns></returns>
-        private GameObject LoadPanel(string wndName)
+        private GameObject LoadPanel(string panelName)
         {
-            //TODO 资源加载
-            // GameObject window = GameObject.Instantiate<GameObject>(Resources.Load<GameObject>(mWindowConfig.GetWindowPath(wndName)), mUIRoot);
-            GameObject window = Object.Instantiate(Resources.Load<GameObject>(wndName), mUIRoot);
+            //Resourced
+            // GameObject window = Object.Instantiate(Resources.Load<GameObject>(panelName), mUIRoot);
+            //YooAsset 同步方法
+            GameObject panel = YooAssets.LoadAssetSync<GameObject>(panelName).InstantiateSync();
+
             //window.transform.SetParent(mUIRoot);
-            window.transform.localScale = Vector3.one;
-            window.transform.localPosition = Vector3.zero;
-            window.transform.rotation = Quaternion.identity;
-            window.name = wndName;
-            return window;
+            panel.transform.localScale = Vector3.one;
+            panel.transform.localPosition = Vector3.zero;
+            panel.transform.rotation = Quaternion.identity;
+            panel.name = panelName;
+            return panel;
         }
 
         /// <summary>
