@@ -17,11 +17,17 @@ public class AppFacade : MonoBehaviour
         DontDestroyOnLoad(this);
         InitializeUI();
         InitializeYooAsset();
+        InitializeConfig();
     }
 
     private void InitializeUI()
     {
         UIManager.Instance.Initialize();
+    }
+
+    private void InitializeConfig()
+    {
+        ConfigManager.Instance.InitializeConfig();
     }
 
     private void InitializeYooAsset()
