@@ -20,4 +20,4 @@ Unity简单框架。(工具集，还谈不上框架)
 
 ## Requirements
 
-- Odin Inspector and Serializer 3.3+
+- Odin Inspector and Serializer 3.3+ 商业化用途请自行购买
