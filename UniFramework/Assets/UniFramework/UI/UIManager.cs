@@ -60,8 +60,12 @@ namespace UniFramework.UI
         /// </summary>
         public void Initialize()
         {
-            mUICamera = GameObject.Find("UICamera").GetComponent<Camera>();
-            mUIRoot = GameObject.Find("UIRoot").transform;
+            mUICamera = GameObject.Find("UICamera")?.GetComponent<Camera>();
+            mUIRoot = GameObject.Find("UIRoot")?.transform;
+            if (mUICamera == null || mUIRoot == null)
+            {
+                Debug.LogError("UI初始化失败，请检查.");
+            }
         }
 
         #region 窗口管理
