@@ -8,7 +8,7 @@ public class CustomAudioLoader : SingletonBase<CustomAudioLoader>
 {
     public void Initalize()
     {
-        // Æô¶¯Ê±ĞèÒªµ÷ÓÃÒ»´Î
+        // å¯åŠ¨æ—¶éœ€è¦è°ƒç”¨ä¸€æ¬¡
         AudioKit.Config.AudioLoaderPool = new YooAssetAudioLoaderPool();
     }
 
