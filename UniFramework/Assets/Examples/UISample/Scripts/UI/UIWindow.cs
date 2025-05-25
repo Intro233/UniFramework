@@ -10,7 +10,7 @@ public partial class UIWindow : UniFramework.UI.UIBase
     public override void OnAwake()
     {
         base.OnAwake();
-        InitBind(mBindMono);
+        this.InitBind(gameObject);
         AddButtonClickListener(ShowButton, () =>
         {
             if (isOpen)

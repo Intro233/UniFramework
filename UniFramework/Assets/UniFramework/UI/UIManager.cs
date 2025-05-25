@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using YooAsset;
 using Object = UnityEngine.Object;
 
 namespace UniFramework.UI
 {
     /// <summary>
-    /// UI¹ÜÀíÆ÷ - µ¥ÀıÄ£Ê½
+    /// UIç®¡ç†å™¨ - å•ä¾‹æ¨¡å¼
     /// </summary>
     public class UIManager
     {
@@ -30,15 +29,15 @@ namespace UniFramework.UI
         {
         }
 
-        private Camera mUICamera; // ³¡¾° UI Ïà»ú
-        private Transform mUIRoot; // UI ¸ùÎïÌå
+        private Camera mUICamera; // åœºæ™¯ UI ç›¸æœº
+        private Transform mUIRoot; // UI æ ¹ç‰©ä½“
 
-        private Dictionary<string, UIBase> mAllWindowDic = new Dictionary<string, UIBase>(); // ËùÓĞ´°¿ÚµÄDic key-´°¿ÚÀàÃû
-        private List<UIBase> mAllWindowList = new List<UIBase>(); // ËùÓĞ´°¿ÚµÄÁĞ±í
-        private List<UIBase> mVisibleWindowList = new List<UIBase>(); // ËùÓĞ¿É¼û´°¿ÚµÄÁĞ±í
+        private Dictionary<string, UIBase> mAllWindowDic = new Dictionary<string, UIBase>(); // æ‰€æœ‰çª—å£çš„Dic key-çª—å£ç±»å
+        private List<UIBase> mAllWindowList = new List<UIBase>(); // æ‰€æœ‰çª—å£çš„åˆ—è¡¨
+        private List<UIBase> mVisibleWindowList = new List<UIBase>(); // æ‰€æœ‰å¯è§çª—å£çš„åˆ—è¡¨
 
-        private Queue<UIBase> mWindowStack = new Queue<UIBase>(); // ¶ÓÁĞ ÓÃÀ´¹ÜÀíµ¯´°µÄÑ­»·µ¯³ö
-        private bool mStartPopStackWndStatus; // ¿ªÊ¼µ¯³ö¶ÑÕ»µÄ±íÖ» ¿ÉÒÔÓÃÀ´´¦Àí¶àÖÖÇé¿ö ±ÈÈç£ºÕıÔÚ³öÕ»ÖÖÓĞÆäËû½çÃæµ¯³ö ¿ÉÒÔÖ±½Ó·Åµ½Õ»ÄÚ½øĞĞµ¯³ö µÈ
+        private Queue<UIBase> mWindowStack = new Queue<UIBase>(); // é˜Ÿåˆ— ç”¨æ¥ç®¡ç†å¼¹çª—çš„å¾ªç¯å¼¹å‡º
+        private bool mStartPopStackWndStatus; // å¼€å§‹å¼¹å‡ºå †æ ˆçš„è¡¨åª å¯ä»¥ç”¨æ¥å¤„ç†å¤šç§æƒ…å†µ æ¯”å¦‚ï¼šæ­£åœ¨å‡ºæ ˆç§æœ‰å…¶ä»–ç•Œé¢å¼¹å‡º å¯ä»¥ç›´æ¥æ”¾åˆ°æ ˆå†…è¿›è¡Œå¼¹å‡º ç­‰
 
         private int mSortingOrderStep = 20;
 
@@ -56,7 +55,7 @@ namespace UniFramework.UI
         }
 
         /// <summary>
-        /// ³õÊ¼»¯ UIModule ¹ÜÀíÆ÷·½·¨
+        /// åˆå§‹åŒ– UIModule ç®¡ç†å™¨æ–¹æ³•
         /// </summary>
         public void Initialize()
         {
@@ -64,14 +63,14 @@ namespace UniFramework.UI
             mUIRoot = GameObject.Find("UIRoot")?.transform;
             if (mUICamera == null || mUIRoot == null)
             {
-                Debug.LogError("UI³õÊ¼»¯Ê§°Ü£¬Çë¼ì²é.");
+                Debug.LogError("UIåˆå§‹åŒ–å¤±è´¥ï¼Œè¯·æ£€æŸ¥.");
             }
         }
 
-        #region ´°¿Ú¹ÜÀí
+        #region çª—å£ç®¡ç†
 
         /// <summary>
-        /// µ¯³öÒ»¸öµ¯´° ²¢äÖÈ¾ÔÚÊÓ´°×îÇ°Ãæ
+        /// å¼¹å‡ºä¸€ä¸ªå¼¹çª— å¹¶æ¸²æŸ“åœ¨è§†çª—æœ€å‰é¢
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
@@ -85,13 +84,13 @@ namespace UniFramework.UI
                 return ShowWindow(panelName) as T;
             }
 
-            // Èç¹û´°¿Ú²»´æÔÚ ÔòĞÂ½¨Ò»¸ö
+            // å¦‚æœçª—å£ä¸å­˜åœ¨ åˆ™æ–°å»ºä¸€ä¸ª
             T t = new T();
             return InitializeWindow(t, panelName) as T;
         }
 
         /// <summary>
-        /// ·ºĞÍ Òş²ØÃæ°å
+        /// æ³›å‹ éšè—é¢æ¿
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public void HidePanel<T>() where T : UIBase
@@ -100,9 +99,9 @@ namespace UniFramework.UI
         }
 
         /// <summary>
-        /// Òş²ØÃæ°å
+        /// éšè—é¢æ¿
         /// </summary>
-        /// <param name="wndName">Ãæ°åÀàÃû</param>
+        /// <param name="wndName">é¢æ¿ç±»å</param>
         public void HidePanel(string wndName)
         {
             UIBase panel = GetPanel(wndName);
@@ -110,14 +109,14 @@ namespace UniFramework.UI
         }
 
         /// <summary>
-        /// »ñÈ¡ÒÑ¾­µ¯³öµÄµ¯´°
+        /// è·å–å·²ç»å¼¹å‡ºçš„å¼¹çª—
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public T GetPanel<T>() where T : UIBase
         {
             var type = typeof(T);
-            // Ò»°ã¶¼ÊÇ·ÃÎÊÒÑ¾­´ò¿ªµÄ´°¿Ú ½øĞĞÒ»Ğ© API µ÷ÓÃ
+            // ä¸€èˆ¬éƒ½æ˜¯è®¿é—®å·²ç»æ‰“å¼€çš„çª—å£ è¿›è¡Œä¸€äº› API è°ƒç”¨
             foreach (var item in mVisibleWindowList)
             {
                 if (item.Name == type.Name)
@@ -126,12 +125,12 @@ namespace UniFramework.UI
                 }
             }
 
-            Debug.LogError("¸Ã´°¿ÚÃ»ÓĞ»ñÈ¡µ½£º" + type.Name);
+            Debug.LogError("è¯¥çª—å£æ²¡æœ‰è·å–åˆ°ï¼š" + type.Name);
             return null;
         }
 
         /// <summary>
-        /// ·ºĞÍ Ïú»ÙÃæ°å
+        /// æ³›å‹ é”€æ¯é¢æ¿
         /// </summary>
         /// <typeparam name="T"></typeparam>
         public void DestroyPanel<T>() where T : UIBase
@@ -140,12 +139,12 @@ namespace UniFramework.UI
         }
 
         /// <summary>
-        /// Ïú»ÙËùÓĞµÄÃæ°å¶¼Ïú»Ùµô
+        /// é”€æ¯æ‰€æœ‰çš„é¢æ¿éƒ½é”€æ¯æ‰
         /// </summary>
         /// <param name="filterlist"></param>
         public void DestroyAllPanel(List<string> filterlist = null)
         {
-            // ·´ÏòÑ­»·½øĞĞ±ßÑ­»·±ßÉ¾³ı ÁĞ±íµÄ±¾ÖÊÊÇÊı×é
+            // åå‘å¾ªç¯è¿›è¡Œè¾¹å¾ªç¯è¾¹åˆ é™¤ åˆ—è¡¨çš„æœ¬è´¨æ˜¯æ•°ç»„
             for (int i = mAllWindowList.Count - 1; i >= 0; i--)
             {
                 UIBase panel = mAllWindowList[i];
@@ -157,22 +156,22 @@ namespace UniFramework.UI
                 DestroyPanel(panel.Name);
             }
 
-            // ×¢ÒâÊÍ·Å×ÊÔ´µÄÊ±»ú
+            // æ³¨æ„é‡Šæ”¾èµ„æºçš„æ—¶æœº
             Resources.UnloadUnusedAssets();
         }
 
 
         /// <summary>
-        /// ³õÊ¼»¯´°¿Ú
+        /// åˆå§‹åŒ–çª—å£
         /// </summary>
-        /// <param name="panelBase">´°¿Ú¶ÔÏó</param>
-        /// <param name="PanelName">´°¿ÚÃû</param>
+        /// <param name="panelBase">çª—å£å¯¹è±¡</param>
+        /// <param name="PanelName">çª—å£å</param>
         /// <returns></returns>
         private UIBase InitializeWindow(UIBase panelBase, string PanelName)
         {
-            // 1.Éú³É¶ÔÓ¦µÄ´°¿ÚÔ¤ÖÆÌå
+            // 1.ç”Ÿæˆå¯¹åº”çš„çª—å£é¢„åˆ¶ä½“
             GameObject nWnd = LoadPanel(PanelName);
-            // 2.³õÊ¼»¯¶ÔÓ¦¹ÜÀíÀà
+            // 2.åˆå§‹åŒ–å¯¹åº”ç®¡ç†ç±»
             if (nWnd != null)
             {
                 panelBase.gameObject = nWnd;
@@ -181,7 +180,7 @@ namespace UniFramework.UI
                 panelBase.Canvas.worldCamera = mUICamera;
                 panelBase.transform.SetAsLastSibling();
                 panelBase.Name = nWnd.name;
-                // µ÷ÓÃ¸Ã´°¿ÚµÄÉúÃüÖÜÆÚº¯Êı ²¢ÉèÖÃ¿É¼û
+                // è°ƒç”¨è¯¥çª—å£çš„ç”Ÿå‘½å‘¨æœŸå‡½æ•° å¹¶è®¾ç½®å¯è§
                 panelBase.OnAwake();
                 panelBase.SetVisible(true);
                 panelBase.OnShow();
@@ -189,7 +188,7 @@ namespace UniFramework.UI
                 rectTrans.anchorMax = Vector2.one;
                 rectTrans.offsetMax = Vector2.zero;
                 rectTrans.offsetMin = Vector2.zero;
-                // Ìí¼Óµ½¶ÔÓ¦ÁĞ±íÖĞ½øĞĞ¹ÜÀí
+                // æ·»åŠ åˆ°å¯¹åº”åˆ—è¡¨ä¸­è¿›è¡Œç®¡ç†
                 mAllWindowDic.Add(PanelName, panelBase);
                 mAllWindowList.Add(panelBase);
                 mVisibleWindowList.Add(panelBase);
@@ -198,21 +197,23 @@ namespace UniFramework.UI
                 return panelBase;
             }
 
-            Debug.LogError("Ã»ÓĞ¼ÓÔØµ½¶ÔÓ¦µÄ´°¿Ú ´°¿ÚÃû×Ö£º" + PanelName);
+            Debug.LogError("æ²¡æœ‰åŠ è½½åˆ°å¯¹åº”çš„çª—å£ çª—å£åå­—ï¼š" + PanelName);
             return null;
         }
 
         /// <summary>
-        /// ¶¯Ì¬¼ÓÔØ´°¿ÚÔ¤ÖÆ¼ş
+        /// åŠ¨æ€åŠ è½½çª—å£é¢„åˆ¶ä»¶
         /// </summary>
-        /// <param name="panelName">´°¿ÚÃû</param>
+        /// <param name="panelName">çª—å£å</param>
         /// <returns></returns>
         private GameObject LoadPanel(string panelName)
         {
             //Resourced
             // GameObject window = Object.Instantiate(Resources.Load<GameObject>(panelName), mUIRoot);
-            //YooAsset Í¬²½·½·¨
-            GameObject panel = YooAssets.LoadAssetSync<GameObject>(panelName).InstantiateSync();
+
+            //YooAsset åŒæ­¥æ–¹æ³•
+            // GameObject panel = YooAssets.LoadAssetSync<GameObject>(panelName).InstantiateSync();
+            GameObject panel = Object.Instantiate(Resources.Load<GameObject>(panelName), mUIRoot);
 
             //window.transform.SetParent(mUIRoot);
             panel.transform.localScale = Vector3.one;
@@ -223,7 +224,7 @@ namespace UniFramework.UI
         }
 
         /// <summary>
-        /// µ¯³öÒ»¸ö´°¿Ú ²¢äÖÈ¾ÔÚÊÓ´°×îÇ°Ãæ
+        /// å¼¹å‡ºä¸€ä¸ªçª—å£ å¹¶æ¸²æŸ“åœ¨è§†çª—æœ€å‰é¢
         /// </summary>
         /// <param name="panel"></param>
         /// <returns></returns>
@@ -242,23 +243,23 @@ namespace UniFramework.UI
 
 
         /// <summary>
-        /// show µ¯³ö¹ıµÄ´°¿Ú
+        /// show å¼¹å‡ºè¿‡çš„çª—å£
         /// </summary>
-        /// <param name="winName">´°¿ÚÀàÃû</param>
+        /// <param name="winName">çª—å£ç±»å</param>
         /// <returns></returns>
         private UIBase ShowWindow(string winName)
         {
             UIBase panel;
-            // ÒÑ¾­´ò¿ª¹ı
+            // å·²ç»æ‰“å¼€è¿‡
             if (mAllWindowDic.ContainsKey(winName))
             {
                 panel = mAllWindowDic[winName];
-                // ´°¿ÚÒÑ¾­´æÔÚ ÇÒ ÊÇ²»¿É¼ûµÄ
+                // çª—å£å·²ç»å­˜åœ¨ ä¸” æ˜¯ä¸å¯è§çš„
                 if (panel.gameObject != null && panel.Visible == false)
                 {
-                    // Ìí¼Óµ½¿É¼ûÁĞ±íÖĞ¹ÜÀí
+                    // æ·»åŠ åˆ°å¯è§åˆ—è¡¨ä¸­ç®¡ç†
                     mVisibleWindowList.Add(panel);
-                    // ½«´°¿ÚÎ»ÖÃÉèÖÃÎª×îºóÒ»¸ö ×îÓÅÏÈäÖÈ¾
+                    // å°†çª—å£ä½ç½®è®¾ç½®ä¸ºæœ€åä¸€ä¸ª æœ€ä¼˜å…ˆæ¸²æŸ“
                     panel.transform.SetAsLastSibling();
                     panel.SetVisible(true);
                     SetWidnowMaskVisible();
@@ -269,15 +270,15 @@ namespace UniFramework.UI
                 return panel;
             }
             else
-                Debug.LogError(winName + " ´°¿Ú²»´æÔÚ£¬Çëµ÷ÓÃPopUpWindow ½øĞĞµ¯³ö");
+                Debug.LogError(winName + " çª—å£ä¸å­˜åœ¨ï¼Œè¯·è°ƒç”¨PopUpWindow è¿›è¡Œå¼¹å‡º");
 
             return null;
         }
 
         /// <summary>
-        /// µÃµ½ÒÑ¾­µ¯³ö¹ıµÄ´°¿Ú
+        /// å¾—åˆ°å·²ç»å¼¹å‡ºè¿‡çš„çª—å£
         /// </summary>
-        /// <param name="winName">´°¿ÚÀàÃû</param>
+        /// <param name="winName">çª—å£ç±»å</param>
         /// <returns></returns>
         private UIBase GetPanel(string winName)
         {
@@ -292,16 +293,16 @@ namespace UniFramework.UI
 
         private void HidePanel(UIBase panel)
         {
-            // Ãæ°å²»Îª¿Õ ÇÒ ÊÇ¿É¼ûµÄ
+            // é¢æ¿ä¸ä¸ºç©º ä¸” æ˜¯å¯è§çš„
             if (panel != null && panel.Visible)
             {
                 mVisibleWindowList.Remove(panel);
-                panel.SetVisible(false); // Òş²Øµ¯´°ÎïÌå
+                panel.SetVisible(false); // éšè—å¼¹çª—ç‰©ä½“
                 SetWidnowMaskVisible();
                 panel.OnHide();
             }
 
-            // ÔÚ³öÕ»µÄÇé¿öÏÂ£¬ÉÏÒ»¸ö½çÃæÒş²ØÊ±£¬×Ô¶¯´ò¿ªÕ»ÖÖµÄÏÂÒ»¸ö½çÃæ
+            // åœ¨å‡ºæ ˆçš„æƒ…å†µä¸‹ï¼Œä¸Šä¸€ä¸ªç•Œé¢éšè—æ—¶ï¼Œè‡ªåŠ¨æ‰“å¼€æ ˆç§çš„ä¸‹ä¸€ä¸ªç•Œé¢
             PopNextStackWindow(panel);
         }
 
@@ -318,7 +319,7 @@ namespace UniFramework.UI
             {
                 if (mAllWindowDic.ContainsKey(panel.Name))
                 {
-                    // ÔÚ¶ÔÓ¦ÈİÆ÷ÖĞ ÒÆ³ı¶ÔÓ¦µÄÃæ°å
+                    // åœ¨å¯¹åº”å®¹å™¨ä¸­ ç§»é™¤å¯¹åº”çš„é¢æ¿
                     mAllWindowDic.Remove(panel.Name);
                     mAllWindowList.Remove(panel);
                     mVisibleWindowList.Remove(panel);
@@ -329,7 +330,7 @@ namespace UniFramework.UI
                 panel.OnHide();
                 panel.OnDestroy();
                 Object.Destroy(panel.gameObject);
-                // ÔÚ³öÕ»µÄÇé¿öÏÂ ÉÏÒ»¸ö½çÃæÏú»ÙÊ± ×Ô¶¯´ò¿ªÕ»ÖÖµÄÏÂÒ»¸ö½çÃæ
+                // åœ¨å‡ºæ ˆçš„æƒ…å†µä¸‹ ä¸Šä¸€ä¸ªç•Œé¢é”€æ¯æ—¶ è‡ªåŠ¨æ‰“å¼€æ ˆç§çš„ä¸‹ä¸€ä¸ªç•Œé¢
                 PopNextStackWindow(panel);
             }
         }
@@ -348,25 +349,25 @@ namespace UniFramework.UI
 
         private void SetWidnowMaskVisible()
         {
-            //TODO ÔİÊ±Ä¬ÈÏ²»Æô¶¯µ¥ÕÚÕÖ
+            //TODO æš‚æ—¶é»˜è®¤ä¸å¯åŠ¨å•é®ç½©
             return;
-            // µ¥ÕÚºÍµşÕÚÄ£Ê½´¦Àí
+            // å•é®å’Œå é®æ¨¡å¼å¤„ç†
             if (!UISetting.Instance.SINGMASK_SYSTEM)
             {
                 return;
             }
 
-            UIBase maxOrderWndBase = null; // ×î´óäÖÈ¾²ã¼¶µÄ´°¿Ú
-            int maxOrder = 0; // ×î´óäÖÈ¾²ã¼¶
-            int maxIndex = 0; // ×î´óÅÅĞòÏÂ±ê ÔÚÏàÍ¬¸¸½ÚµãÏÂµÄÎ»ÖÃÏÂ±ê
-            // 1.¹Ø±ÕËùÓĞ´°¿ÚµÄMask ÉèÖÃÎª²»¿É¼û
-            // 2.´ÓËùÓĞ¿É¼û´°¿ÚÖĞÕÒµ½Ò»¸ö²ã¼¶×î´óµÄ´°¿Ú °ÑMaskÉèÖÃÎª¿É¼û
+            UIBase maxOrderWndBase = null; // æœ€å¤§æ¸²æŸ“å±‚çº§çš„çª—å£
+            int maxOrder = 0; // æœ€å¤§æ¸²æŸ“å±‚çº§
+            int maxIndex = 0; // æœ€å¤§æ’åºä¸‹æ ‡ åœ¨ç›¸åŒçˆ¶èŠ‚ç‚¹ä¸‹çš„ä½ç½®ä¸‹æ ‡
+            // 1.å…³é—­æ‰€æœ‰çª—å£çš„Mask è®¾ç½®ä¸ºä¸å¯è§
+            // 2.ä»æ‰€æœ‰å¯è§çª—å£ä¸­æ‰¾åˆ°ä¸€ä¸ªå±‚çº§æœ€å¤§çš„çª—å£ æŠŠMaskè®¾ç½®ä¸ºå¯è§
             for (int i = 0; i < mVisibleWindowList.Count; i++)
             {
                 UIBase panel = mVisibleWindowList[i];
                 if (panel != null && panel.gameObject != null)
                 {
-                    // ÏÈ°ÑËùÓĞ´°¿Ú¿É¼ûĞÔ¹Ø±Õ
+                    // å…ˆæŠŠæ‰€æœ‰çª—å£å¯è§æ€§å…³é—­
                     panel.SetMaskVisible(false);
                     if (maxOrderWndBase == null)
                     {
@@ -376,13 +377,13 @@ namespace UniFramework.UI
                     }
                     else
                     {
-                        // ÕÒµ½×î´óäÖÈ¾²ã¼¶µÄ´°¿Ú ÄÃµ½Ëü
+                        // æ‰¾åˆ°æœ€å¤§æ¸²æŸ“å±‚çº§çš„çª—å£ æ‹¿åˆ°å®ƒ
                         if (maxOrder < panel.Canvas.sortingOrder)
                         {
                             maxOrderWndBase = panel;
                             maxOrder = panel.Canvas.sortingOrder;
                         }
-                        // Èç¹ûÁ½¸ö´°¿ÚµÄäÖÈ¾²ã¼¶ÏàÍ¬ ¾ÍÕÒµ½Í¬½ÚµãÏÂ×î¿¿ÏÂÒ»¸öÎïÌå ÓÅÏÈäÖÈ¾Mask
+                        // å¦‚æœä¸¤ä¸ªçª—å£çš„æ¸²æŸ“å±‚çº§ç›¸åŒ å°±æ‰¾åˆ°åŒèŠ‚ç‚¹ä¸‹æœ€é ä¸‹ä¸€ä¸ªç‰©ä½“ ä¼˜å…ˆæ¸²æŸ“Mask
                         else if (maxOrder == panel.Canvas.sortingOrder && maxIndex < panel.transform.GetSiblingIndex())
                         {
                             maxOrderWndBase = panel;
@@ -400,10 +401,10 @@ namespace UniFramework.UI
 
         #endregion
 
-        #region ¶ÑÕ»ÏµÍ³
+        #region å †æ ˆç³»ç»Ÿ
 
         /// <summary>
-        /// ½øÕ»Ò»¸ö½çÃæ
+        /// è¿›æ ˆä¸€ä¸ªç•Œé¢
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="popCallBack"></param>
@@ -415,17 +416,17 @@ namespace UniFramework.UI
         }
 
         /// <summary>
-        /// µ¯³ö¶ÑÕ»ÖĞµÚÒ»¸öµ¯´°
+        /// å¼¹å‡ºå †æ ˆä¸­ç¬¬ä¸€ä¸ªå¼¹çª—
         /// </summary>
         public void StartPopFirstStackWindow()
         {
             if (mStartPopStackWndStatus) return;
-            mStartPopStackWndStatus = true; //ÒÑ¾­¿ªÊ¼½øĞĞ¶ÑÕ»µ¯³öµÄÁ÷³Ì£¬
+            mStartPopStackWndStatus = true; //å·²ç»å¼€å§‹è¿›è¡Œå †æ ˆå¼¹å‡ºçš„æµç¨‹ï¼Œ
             PopStackWindow();
         }
 
         /// <summary>
-        /// Ñ¹Èë²¢ÇÒµ¯³ö¶ÑÕ»µ¯´°
+        /// å‹å…¥å¹¶ä¸”å¼¹å‡ºå †æ ˆå¼¹çª—
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="popCallBack"></param>
@@ -436,7 +437,7 @@ namespace UniFramework.UI
         }
 
         /// <summary>
-        /// µ¯³ö¶ÑÕ»ÖĞµÄÏÂÒ»¸ö´°¿Ú
+        /// å¼¹å‡ºå †æ ˆä¸­çš„ä¸‹ä¸€ä¸ªçª—å£
         /// </summary>
         /// <param name="panelBase"></param>
         private void PopNextStackWindow(UIBase panelBase)
@@ -449,7 +450,7 @@ namespace UniFramework.UI
         }
 
         /// <summary>
-        /// µ¯³ö¶ÑÕ»µ¯´°
+        /// å¼¹å‡ºå †æ ˆå¼¹çª—
         /// </summary>
         /// <returns></returns>
         public bool PopStackWindow()
@@ -472,7 +473,7 @@ namespace UniFramework.UI
         }
 
         /// <summary>
-        /// Çå¿Õ»º´æ¶ÓÁĞ
+        /// æ¸…ç©ºç¼“å­˜é˜Ÿåˆ—
         /// </summary>
         public void ClearStackWindows()
         {
